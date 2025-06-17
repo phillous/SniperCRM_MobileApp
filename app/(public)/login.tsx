@@ -17,7 +17,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 
 type FormDataProps = {
   username: string;
@@ -97,7 +97,7 @@ const Login = () => {
                   >
                     <TextInput
                       style={defaultStyles.inputField}
-                      placeholder="youremail@here.com"
+                      placeholder="username"
                       onBlur={() => {
                         setIsTextFocus(false);
                         onBlur;

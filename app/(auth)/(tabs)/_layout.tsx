@@ -1,5 +1,6 @@
 import Colors from '@/constants/Colors';
 import useScrollContext, { ScrollProvider } from '@/context/scrollContext';
+import { store } from '@/store';
 import { Ionicons } from '@expo/vector-icons';
 import { PortalProvider } from '@gorhom/portal';
 import { BottomTabBar } from '@react-navigation/bottom-tabs';
@@ -17,6 +18,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Provider } from 'react-redux';
 
 const TAB_BAR_HEIGHT = 72;
 
@@ -171,7 +173,10 @@ const RootLayout = () => {
     <ScrollProvider>
       <PortalProvider>
         <PaperProvider>
-        <Layout />
+          <Provider store={store}>
+            <Layout />
+          </Provider>
+        
         </PaperProvider>
       </PortalProvider>
     </ScrollProvider>

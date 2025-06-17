@@ -1,4 +1,4 @@
-import Colors, { BadgeColors } from '@/constants/Colors';
+import { BadgeColors } from '@/constants/Colors';
 import {
   endOfMonth,
   endOfToday,
@@ -82,6 +82,6 @@ export const getStatusColor = (status: Status) => {
     case 'Scheduled':
       return BadgeColors.yellow;
     default:
-      return Colors.grey; // Fallback
+      return BadgeColors.orange; // Fallback
   }
 };

@@ -1,11 +1,16 @@
-import Colors from '@/constants/Colors'
-import { Ionicons } from '@expo/vector-icons'
-import React from 'react'
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import Colors from '@/constants/Colors';
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+type ModalChildProps = {
+  closeModal?: () => void;
+  id?: string;
+};
 
 type actionProps = {
-    id: string, 
-    children: React.ReactNode,
+    id?: string, 
+    children: React.ReactElement<ModalChildProps> | React.ReactNode;
     title: string,
     visible: boolean,
     setVisible: (index: boolean) => void
@@ -13,8 +18,7 @@ type actionProps = {
 }
 
 const ActionModal = ({id, children, title, visible, setVisible}: actionProps ) => {
-   
-
+  
   return (
     <Modal visible={visible}
       transparent={true}
@@ -25,7 +29,7 @@ const ActionModal = ({id, children, title, visible, setVisible}: actionProps ) =
       <View style={styles.modalOverlay} >
         <View style={styles.modalContent} >
           <View style={styles.modalHeader}>
-            <Text style={{fontSize: 18, fontFamily: 'inter-sb'}}>{title}<Text style={{fontSize: 14, fontFamily: 'inter', marginLeft:2}}>#{id}</Text></Text>
+            <Text style={{fontSize: 18, fontFamily: 'inter-sb', maxWidth: '80%', flexWrap: 'wrap'}}>{title}</Text>
             <TouchableOpacity style={styles.roundCircle} onPress={()=>setVisible(false)}>
               <Ionicons name='close' size={24} />
             </TouchableOpacity>
@@ -34,6 +38,7 @@ const ActionModal = ({id, children, title, visible, setVisible}: actionProps ) =
           ? React.cloneElement(children as React.ReactElement<any>, {
               ...(children.props || {}),
               closeModal: () => setVisible(false),
+              id: id
             })
           : children}
             </View>

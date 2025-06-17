@@ -1,11 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
-import { Modal } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { Calendar } from 'react-native-calendars';
 import Colors from '@/constants/Colors';
 import { defaultStyles } from '@/constants/Styles';
+import { Ionicons } from '@expo/vector-icons';
 import { format } from 'date-fns';
+import React, { useState } from 'react';
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Calendar } from 'react-native-calendars';
 
 type BottomModalProps = {
   visible: boolean;

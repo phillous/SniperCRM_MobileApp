@@ -77,6 +77,17 @@ const Layout = () => {
           headerShadowVisible: false
         }}
       />
+
+      <Stack.Screen
+        name="(modal)/schedule"
+        options={{
+          presentation: 'fullScreenModal',
+          animation: 'none',
+          headerBackVisible: false,
+          headerShown: false,
+          headerShadowVisible: false
+        }}
+      />
     </Stack>
   );
 };

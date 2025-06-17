@@ -1,48 +1,61 @@
+import AddTag from "@/components/Orders/AddTag";
+import AssignOrder from "@/components/Orders/AssignOrder";
+import Awaiting from "@/components/Orders/Awaiting";
+import Comment from "@/components/Orders/Comment";
+import ActionModal from "@/components/ui/ActionModal";
 import { actionButton } from "@/utils/data";
 import { Link, useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
-    FlatList,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import ActionModal from "../ui/ActionModal";
-import AddTag from "./AddTag";
-import AssignOrder from "./AssignOrder";
 
-const Actions = ({ id, name: customerName }) => {
+type ComponentKey = "AddTag" | "AssignOrder" | "Awaiting" | "Shipped" | "Comment" | "Cancel";
+
+type ComponentConfig = {
+  component: React.ReactNode;
+  title: string;
+};
+
+
+
+const Actions = ({ id, name: customerName }: { id: string; name: string }) => {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
-  const [activeComponent, setActiveComponent] = useState(null);
-  const components = {
-    AddTag: <AddTag closeModal={undefined} />,
-    AssignOrder: <AssignOrder closeModal={undefined} />,
-    Awaiting: <Text>Awaiting Component</Text>,
-    Shipped: <Text>Shipped Component</Text>,
-    Comment: <Text>Comment</Text>,
-    Cancel: <Text>Cancel</Text>,
-    // etc.
-  };
+  const [activeComponent, setActiveComponent] = useState<ComponentKey | null>(null);
 
-  function handleItemPress(item) {
+
+
+// Inside your component
+const components: Record<ComponentKey, ComponentConfig> = useMemo(() => ({
+  AddTag: { component: <AddTag />, title: "Tags" },
+  AssignOrder: { component: <AssignOrder />, title: "Assign Order" },
+  Awaiting: { component: <Awaiting />, title: `Assign ${customerName} to...` },
+  Shipped: { component: <Text>Shipped Component</Text>, title: "Shipped" },
+  Comment: { component: <Comment />, title: `Comment on ${customerName} order...` },
+  Cancel: { component: <Text>Cancel</Text>, title: `Cancel ${customerName} order...` },
+}), [customerName]);
+
+
+  function handleItemPress(item: any) {
     if (item.action && typeof item.action === "function") {
       item.action();
       setVisible(false); // Hide modal just in case
       setActiveComponent(null);
     } else if (item.component) {
-      setActiveComponent(item.component);
-      setVisible(true);
+      setActiveComponent(item.key);
+      setVisible(true); 
     } else if (item.navigation) {
       setVisible(false); // Hide modal just in case
       setActiveComponent(null);
     }
   }
 
-  // Calculate width for each item based on screen width and desired gaps
-  const numColumns = 4;
-  const gap = 8; // Gap between items
+
 
   return (
     <View style={styles.container}>
@@ -65,9 +78,11 @@ const Actions = ({ id, name: customerName }) => {
             ) : // Regular action button
             item.navigation ? (
               <Link
-                href={`${item.navigation}/?id=${encodeURIComponent(
-                  id
-                )}&name=${encodeURIComponent(customerName)}`}
+                href={
+                  `${item.navigation}/?id=${encodeURIComponent(
+                    id
+                  )}&name=${encodeURIComponent(customerName)}` as any
+                }
                 asChild
               >
                 <TouchableOpacity style={styles.item}>
@@ -86,17 +101,18 @@ const Actions = ({ id, name: customerName }) => {
         )}
         keyExtractor={(item) => String(item.id)}
       />
-      {visible && activeComponent && (
+           {visible && activeComponent && (
         <ActionModal
           id={id}
-          title={activeComponent}
+          title={components[activeComponent].title}
           visible={visible}
           setVisible={setVisible}
         >
-          {components[activeComponent]}
+          {components[activeComponent].component}
         </ActionModal>
       )}
     </View>
+
   );
 };
 

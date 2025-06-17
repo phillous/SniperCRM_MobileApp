@@ -1,10 +1,15 @@
-import Colors from '@/constants/Colors'
-import { Ionicons } from '@expo/vector-icons'
-import React, { useState } from 'react'
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import Colors from '@/constants/Colors';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 
-const AssignOrder = ({closeModal}) => {
+type AssignOrderProps = {
+  closeModal: () => void
+  id: string
+};
+
+const AssignOrder = ({ closeModal, id }: any) => {
     const [assignedStaff, setAssignedStaff] = useState<string | null>(null)
 
     const cancelAssign = () => {

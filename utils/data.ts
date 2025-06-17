@@ -1,4 +1,4 @@
-import { ActionButton, AgentType, expensesTypes, formsType, orderProps, orderSourceTypes, orderStatusWithCount, paymentMethodTypes, productPackageType, staffsTypes } from './types';
+import { ActionButton, AgentType, expensesTypes, formsType, orderProps, orderSourceTypes, orderStatusWithCount, paymentMethodTypes, productPackageType, staffsTypes, timeReminderTypes } from './types';
 
 
 
@@ -967,14 +967,16 @@ export const actionButton: ActionButton[] = [
   {
     id: 2,
     title: "AddTag",
+    key: "AddTag",
     icon: '' as const,
-    component: "AddTag" // Use string identifiers instead of JSX
+    component: "AddTag"
   },
   {
     id: 3,
     title: "AssignOrder",
+    key: "AssignOrder",
     icon: '' as const,
-    component: "AssignOrder" // Use string identifiers instead of JSX
+    component: "AssignOrder"
   },
   {
     id: 4,
@@ -1004,7 +1006,7 @@ export const actionButton: ActionButton[] = [
     id: 7,
     title: "Scheduled",
     icon: '' as const,
-    navigation: '/(auth)/(modal)/scheduleOrder',
+    navigation: '/(auth)/(modal)/schedule',
   },
   {
     id: 8,
@@ -1015,12 +1017,14 @@ export const actionButton: ActionButton[] = [
   {
     id: 9,
     title: "Awaiting",
+    key: "Awaiting",
     icon: '' as const,
     component: "Awaiting",
   },
   {
     id: 10,
     title: "Shipped",
+    key: "Shipped",
     icon: '' as const,
     component: "Shipped",
   },
@@ -1045,8 +1049,9 @@ export const actionButton: ActionButton[] = [
   {
     id: 14,
     title: "Cancel",
+    key: "Cancel",
     icon: '' as const,
-    action: 'hook'
+    component: "Cancel"
   },
   {
     id: 15,
@@ -1057,12 +1062,14 @@ export const actionButton: ActionButton[] = [
   {
     id: 16,
     title: "Comment",
+    key: "Comment",
     icon: '' as const,
     component: "Comment",
   },
   {
     id: 17,
     title: "Message",
+    key: "Message",
     icon: '' as const,
     component: "Message",
   },
@@ -1079,6 +1086,7 @@ export const actionButton: ActionButton[] = [
     action: 'hook'
   },
 ];
+
 
 export const agent: AgentType[] = [
   {
@@ -1172,4 +1180,16 @@ export const paymentMethod: paymentMethodTypes[] = [
   {label: "Payment on delivery", id: "Payment on delivery"},
   {label: "Bank Transfer", id: "Bank Transfer"},
   {label: "Payment on delivery", id: "Payment on delivery"},
+]
+
+export const timeReminder: timeReminderTypes[] = [
+  {label: "10 minutes to Time", id: "10 minutes to Time"},
+  {label: "20 minutes to Time", id: "20 minutes to Time"},
+  {label: "30 minutes to Time", id: "30 minutes to Time"},
+  {label: "1 hour to Time", id: "1 hour to Time"},
+]
+
+export const booleanValue = [
+  {label: 'Yes', id: true},
+  {label: 'No', id: false}
 ]

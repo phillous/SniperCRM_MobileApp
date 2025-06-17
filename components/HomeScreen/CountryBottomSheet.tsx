@@ -97,16 +97,16 @@ const CountryBottomSheet = ({ bottomSheetRef, data = [], onChange }: Props) => {
       style={styles.sheetContainer}
       backdropComponent={renderBackdrop}
       index={-1} // 👈 starts closed
-      snapPoints={['25%']}
+      snapPoints={['28%']}
       animateOnMount={false}
     >
       <View style={styles.header}>
         <Text style={styles.headerText}>Select Country</Text>
         <TouchableOpacity
-          style={defaultStyles.roundCircle}
+          style={[defaultStyles.roundCircle, {backgroundColor: 'lightgrey'}]}
           onPress={() => bottomSheetRef.current?.close()}
         >
-          <Entypo name="cross" size={18} color={Colors.grey} />
+          <Entypo name="cross" size={22} color={Colors.grey} />
         </TouchableOpacity>
       </View>
 

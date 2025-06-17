@@ -1,6 +1,6 @@
 import Colors, { BadgeColors } from '@/constants/Colors';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 
 import useScrollContext from '@/context/scrollContext';
+import { RootState } from '@/store';
+import { setSelectedCategoryIndex } from '@/store/orderSlice';
 import { orderStatus } from '@/utils/data';
 import { Status } from '@/utils/types';
 import { BottomSheetMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
@@ -25,6 +27,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 interface Props {
   onCategoryChanged: (status: Status) => void;
@@ -43,9 +47,11 @@ const ExploreHeader = ({
   const { top } = useSafeAreaInsets();
   const scrollRef = useRef<ScrollView>(null);
   const itemsRef = useRef<(TouchableOpacity | null)[]>([]);
-  const [activeIndex, setActiveIndex] = useState(0);
   const scrollDirection = useSharedValue<'up' | 'down'>('down');
   const router = useRouter();
+  const dispatch = useDispatch();
+  // Replace 'RootState' with the actual type of your Redux root state if different
+  const activeIndex = useSelector((state: RootState) => state.order.selectedCategoryIndex);
 
   useEffect(() => {
     console.log('height', height);
@@ -102,16 +108,27 @@ const ExploreHeader = ({
     };
   });
 
-  const selectCategory = (status: Status, index: number) => {
-    const selected = itemsRef.current[index];
-    setActiveIndex(index);
+  const handleCategoryPress = (index: number) => () => {
+  dispatch(setSelectedCategoryIndex(index));
+};
 
-    selected?.measure((x: number) => {
+useEffect(() => {
+  const selected = itemsRef.current[activeIndex];
+  
+
+  if (selected) {
+    selected.measure((x: number) => {
       scrollRef.current?.scrollTo({ x: x - 16, y: 0, animated: true });
     });
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    onCategoryChanged(status);
-  };
+  }
+
+  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+  const category = orderStatus[activeIndex];
+  onCategoryChanged(category.name);
+}, [activeIndex]);
+    
+
 
   useAnimatedReaction(
     () => scrollY.value,
@@ -164,7 +181,9 @@ const ExploreHeader = ({
               styles.categoriesBtnActive,
               { flexDirection: 'row', alignItems: 'center' },
             ]}
-            onPress={() => sortBottomSheetRef.current?.expand()}
+            onPress={() => {
+              sortBottomSheetRef.current?.expand()
+            }}
           >
             <MaterialCommunityIcons name="tune-vertical-variant" size={24} color="black" />
             <Text style={{ fontFamily: 'inter', fontSize: 14 }}>Sort</Text>
@@ -172,7 +191,7 @@ const ExploreHeader = ({
           {orderStatus.map((item, index) => (
             <TouchableOpacity
               ref={(el: any) => (itemsRef.current[index] = el)}
-              onPress={() => selectCategory(item.name, index)}
+              onPress={() => dispatch(setSelectedCategoryIndex(index))}
               style={
                 activeIndex === index
                   ? [styles.categoriesBtn,styles.categoriesBtnActive ]

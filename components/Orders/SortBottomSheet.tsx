@@ -1,5 +1,6 @@
 import Colors from '@/constants/Colors';
 import { defaultStyles } from '@/constants/Styles';
+import { setSelectedCategoryIndex } from '@/store/orderSlice';
 import { orderStatus } from '@/utils/data';
 import { Status } from '@/utils/types';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,17 +15,19 @@ import { Portal } from '@gorhom/portal';
 import React, { useCallback } from 'react';
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Easing } from 'react-native-reanimated';
+import { useDispatch } from 'react-redux';
 
 type Props = {
   bottomSheetRef: React.RefObject<BottomSheetMethods | null>;
   onCategoryChanged: (status: Status) => void;
 };
 
-const SortBottomSheet = ({ bottomSheetRef, onCategoryChanged }: Props) => {
+const SortBottomSheet = ({ bottomSheetRef }: Props) => {
   const animationConfigs = useBottomSheetTimingConfigs({
     duration: 400,
     easing: Easing.ease,
   });
+  const dispatch = useDispatch()
 
   const renderBackdrop = useCallback(
     (props: BottomSheetBackdropProps) => (
@@ -67,7 +70,7 @@ const SortBottomSheet = ({ bottomSheetRef, onCategoryChanged }: Props) => {
         <View style={defaultStyles.card}>
           <BottomSheetFlatList
             data={orderStatus}
-            renderItem={({ item }) => (
+            renderItem={({ item, index }) => (
               <Pressable
                 style={({ pressed }) => [
                   {
@@ -80,7 +83,7 @@ const SortBottomSheet = ({ bottomSheetRef, onCategoryChanged }: Props) => {
                   },
                 ]}
                 onPress={() => {
-                  onCategoryChanged(item.name);
+                  dispatch(setSelectedCategoryIndex(index))
                   bottomSheetRef.current?.close();
                 }}
               >

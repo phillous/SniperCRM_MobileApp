@@ -65,6 +65,7 @@ export type orderStatusWithCount = {
 export type ActionButton = {
   id: number;
   title: string;
+  key?: string;
   icon: string;
   action?: string;
   component?: string;
@@ -78,3 +79,4 @@ export type expensesTypes = { label: string; id: number };
 export type staffsTypes = { label: string; id: number };
 export type orderSourceTypes = {label: string, id: string}
 export type paymentMethodTypes = {label: string, id: string}
+export type timeReminderTypes = {label: string, id: string}
